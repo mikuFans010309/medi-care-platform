@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: user-service  #指定nacos服务名称
+
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848 # Nacos 服务地址(格式 host:port) 默认为8848
+        namespace:         # 命名空间ID (public 默认)
+        group: DEFAULT_GROUP      # 分组,用于分类服务 (DEFAULT_GROUP 默认)
+        ip: 127.0.0.1  # 指定注册到Nacos的服务IP
+        register-enabled: true  # 是否启用注册
+        instance-enabled: true  # 实例是否启用
+      config:
+        server-addr:  $ {spring.cloud.nacos.discovery.server-addr}  #配置中心地址 复用了discovery的地址（即同一个Nacos实例）。
+        file-extension: yaml  #配置文件的格式，支持yaml或properties。你选择了yaml
+        namespace:  $ {spring.cloud.nacos.discovery.namespace} #配置的命名空间，复用discovery的命名空间
+        group:  $ {spring.cloud.nacos.discovery.group} #配置的分组，复用discovery的分组
+        # 开启自动刷新 (可选)
+        refresh-enabled: true  #。设置为true后，当Nacos中的配置发生变化时，Spring Cloud会自动拉取并更新应用内的配置(无需重启)

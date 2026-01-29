@@ -1,0 +1,128 @@
+/*
+package com.mediacare.user.Filter;
+
+
+import com.mediacare.user.util.JwtUtil;
+import com.mediacare.user.util.UserContext;
+import jakarta.servlet.*;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
+
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+
+@Component
+@Slf4j
+@Order(2) //设置优先级，以防多个过滤器处理同一请求出现逻辑错误
+public class JwtAuthenticationFilter implements Filter {
+
+    @Autowired
+    JwtUtil jwtUtil;
+
+    // 定义无需认证的路径（白名单）
+    private static final List<String> EXCLUDE_PATHS = Arrays.asList(
+            "/api/auth/login",
+            "/api/auth/register",
+            "/error",           // Spring Boot 错误页面
+            "/api/swagger-ui/**",   // Swagger 文档
+            "/api/v3/api-docs/**",
+            "/api/actuator/health"  // 健康检查
+    );
+    @Override
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain) throws IOException, ServletException {
+        //需要获取Http对象 以调用Http特有的方法
+        HttpServletRequest request = (HttpServletRequest) servletRequest;
+        HttpServletResponse response=(HttpServletResponse) servletResponse;
+        String requestURL = request.getRequestURI();
+        // 判断是否在白名单中
+        if (isExcludePath(requestURL)) {
+            // 跳过 JWT 校验
+            chain.doFilter(request, response);
+            return;
+        }
+
+        // 1. 获取 Authorization 头
+        // 需要请求头中设置Authorization: Bearer <token>
+        String authorizationHeader = request.getHeader("Authorization");
+
+        // 2. 判断是否为空或格式错误
+        if (authorizationHeader == null || authorizationHeader.trim().isEmpty()) {
+            writeErrorResponse(response, "未登录或 token 无效");
+            //日志记录(便于排查)
+            log.warn("请求未携带 Authorization 头，URL: {}, IP: {}", request.getRequestURI(), request.getRemoteAddr());
+            return;
+        }
+
+        //判断格式 并且Bearer 一定要带空格
+        if (!authorizationHeader.startsWith("Bearer ")) {
+            writeErrorResponse(response, "token 格式错误");
+            return;
+        }
+
+        // 3. 提取 token
+        String token = authorizationHeader.substring(7).trim(); // 去掉 "Bearer " 并去空格
+
+        // 4. 验证 token
+        if (!JwtUtil.validateToken(token)) {
+            writeErrorResponse(response, "token 已过期或无效");
+            return;
+        }
+
+        // 5. 提取用户信息
+        Long userId = JwtUtil.getUserIdFromToken(token);
+        Integer userType = JwtUtil.getUserTypeFromToken(token);
+
+        // 6. 放入上下文(线程安全)
+        UserContext.setUserId(userId);
+        UserContext.setUserType(userType);
+        //日志成功记录
+        log.info("JWT Token 验证成功，用户ID: {}", userId);
+
+        try {
+            // 7. 放行
+            chain.doFilter(request, response); // 继续执行
+        } finally {
+            UserContext.clear(); // 当controller层的业务走完之后并返回结果之后，则需要关闭此线程预防内存泄漏
+        }
+     }
+
+     //错误响应方法
+    private void writeErrorResponse(HttpServletResponse res, String msg) throws IOException {
+        res.setStatus(401);
+        res.setContentType("application/json;charset=UTF-8");
+        res.getWriter().write("{\"code\":401,\"msg\":\"" + msg + "\"}");
+    }
+
+    // 判断是否为排除路径（支持通配符 /**）
+    private boolean isExcludePath(String uri) {
+        for (String exclude : EXCLUDE_PATHS) {
+            */
+/*
+            判断当前白名单路径是否以 "/**" 结尾。
+            例如：/swagger-ui/** 表示所有以 /swagger-ui/ 开头的路径都无需鉴权。*//*
+
+            if (exclude.endsWith("/**")) {
+                //获取除去 /**结尾的前缀
+                String prefix = exclude.substring(0, exclude.length() - 3);
+                //判断uri请求路径是否以这个前缀开头
+                if (uri.startsWith(prefix)) {
+                    return true;
+                }
+            */
+/*
+            * 不是以/**结尾的，则直接判断是否相等
+            * *//*
+
+            } else if (uri.equals(exclude)) {
+                return true;
+            }
+        }
+        return false;
+    }
+}
+*/

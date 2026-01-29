@@ -1,0 +1,73 @@
+package com.mediacare.user.interceptor;
+
+
+import com.mediacare.user.util.JwtUtil;
+import com.mediacare.user.util.UserContext;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.HandlerInterceptor;
+
+import java.io.IOException;
+
+@Slf4j
+@Component
+public class LoginInterceptor implements HandlerInterceptor {
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        // 1. 获取 Authorization 头
+        // 需要请求头中设置Authorization: Bearer <token>
+        String authorizationHeader = request.getHeader("Authorization");
+
+        // 2. 判断是否为空或格式错误
+        if (authorizationHeader == null || authorizationHeader.trim().isEmpty()) {
+            writeErrorResponse(response, "未登录或 token 无效");
+            //日志记录(便于排查)
+            log.warn("请求未携带 Authorization 头，URL: {}, IP: {}", request.getRequestURI(), request.getRemoteAddr());
+            return false;
+        }
+
+        //判断格式 并且Bearer 一定要带空格
+        if (!authorizationHeader.startsWith("Bearer ")) {
+            writeErrorResponse(response, "token 格式错误");
+            return false;
+        }
+
+        // 3. 提取 token
+        String token = authorizationHeader.substring(7).trim(); // 去掉 "Bearer " 并去空格
+
+        // 4. 验证 token
+        if (!JwtUtil.validateToken(token)) {
+            writeErrorResponse(response, "token 已过期或无效");
+            return false;
+        }
+
+        // 5. 提取用户信息
+        Long userId = JwtUtil.getUserIdFromToken(token);
+        Integer userType = JwtUtil.getUserTypeFromToken(token);
+
+        // 6. 放入上下文(线程安全)
+        UserContext.setUserId(userId);
+        UserContext.setUserType(userType);
+        //日志成功记录
+        log.info("JWT Token 验证成功，用户ID: {}", userId);
+
+            // 7. 放行
+            return true;
+    }
+
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+        // 在请求完成时清理上下文，避免内存泄漏。
+        UserContext.clear();
+    }
+
+    //错误响应方法
+    private void writeErrorResponse(HttpServletResponse res, String msg) throws IOException {
+        res.setStatus(401);
+        res.setContentType("application/json;charset=UTF-8");
+        res.getWriter().write("{\"code\":401,\"msg\":\"" + msg + "\"}");
+    }
+
+}
