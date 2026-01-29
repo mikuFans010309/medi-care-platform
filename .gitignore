@@ -1,7 +1,21 @@
-# IntelliJ IDEA
+# Maven 构建目录
+target/
+**/target/
+# IDE 配置文件（IntelliJ IDEA）
 .idea/
 *.iml
 *.iws
 *.ipr
 out/
-build/
+# Eclipse
+.classpath
+.project
+.settings/
+# 日志文件
+*.log
+logs/
+# 临时文件
+*.tmp
+*.swp
+# SQL 脚本（若不需要提交，可添加；若需要提交，保留）
+# sql/*.sql
