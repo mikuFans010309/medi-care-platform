@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: gateway-service # 服务名，必须唯一
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848 # 你的 Nacos 地址
+#        namespace: ""         # 命名空间ID (public 默认)
+#        group: DEFAULT_GROUP      # 分组,用于分类服务 (DEFAULT_GROUP 默认)
+#        ip: 127.0.0.1  # 指定注册到Nacos的服务IP
+#        register-enabled: true  # 是否启用注册
+#        instance-enabled: true  # 实例是否启用

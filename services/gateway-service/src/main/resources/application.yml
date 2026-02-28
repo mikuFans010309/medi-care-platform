@@ -1,0 +1,45 @@
+server:
+  port: 8002 # 网关对外端口
+#  servlet:
+#    context-path: /api
+#
+# 日志级别
+logging:
+  level:
+    com.mediacare: debug
+
+
+spring:
+  cloud:
+    sentinel:
+      transport:
+        dashboard: localhost:8081   # Sentinel Dashboard 地址
+        port: 8719                  # 应用与 Dashboard 通信的端口（默认）
+      eager: true                   # 取消懒加载，启动即连接
+    gateway:
+      discovery:
+        locator:
+          enabled: true  # 关键：开启基于服务名的路由转发
+          lower-case-service-id: true  # 服务名转小写（避免Nacos服务名大写、网关匹配不到）
+      routes: #路由规则配置（精准匹配，推荐）
+        - id: user-auth-service-route        # 路由ID，唯一
+          uri: lb://user-service        # 认证服务也使用user-service
+          predicates:
+            - Path=/sys/auth/**         # 匹配sys/auth路径
+          filters:
+            - RewritePath=/sys/auth/(?<segment>.*), /auth/$\{segment}
+            - PrefixPath=/api      # 添加前缀，适配用户服务的 context-path
+
+         #  其他服务的路由规则
+        - id: all-services-route
+          uri: lb://user-service
+          predicates:
+            - Path=/**
+          filters:
+            - RewritePath=/(?<segment>.*), /api/$\{segment}
+
+
+
+jwt:
+  secret-key: yiJU6i33Da4J1r6MuiD2I9TMk3A1nrxnieRFmoja5kU= # 环境变量优先
+  expiration: 7200 # 单位：秒
