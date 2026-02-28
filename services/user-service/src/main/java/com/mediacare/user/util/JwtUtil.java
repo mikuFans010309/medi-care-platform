@@ -5,14 +5,11 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
-import java.security.Key;
-import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,9 +38,9 @@ public class JwtUtil {
         initStaticFields();
     }
 
-    /**
-     * 初始化静态字段，做校验和转换
-     */
+
+
+    //初始化静态字段，做校验和转换
     private void initStaticFields() {
         // 校验配置
         if (secretKey == null || secretKey.trim().isEmpty()) {

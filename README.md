@@ -102,7 +102,7 @@ java -jar target/user-service.jar
 ```
 
 > ✅ 默认端口：`8081`
-> ✅ 访问 Swagger：http://localhost:8081/api/swagger-ui/index.html
+> ✅ 访问 Swagger：http://localhost:8001/api/swagger-ui/index.html
 
 ------
 

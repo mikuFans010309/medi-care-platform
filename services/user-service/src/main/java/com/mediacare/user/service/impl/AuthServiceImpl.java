@@ -43,7 +43,7 @@ public class AuthServiceImpl extends ServiceImpl<UserMapper, SysUser>
         if(!passwordEncoder.matches(request.getPassword(),user.getPassword())){
             throw BusinessException.off(ErrorCode.PASSWORD_ERROR);
         }
-        // 3. 生成 Token
+
         String token = JwtUtil.generateToken(user.getId(), user.getUserType());
         // 4. 返回结果
         UserInfoResponse userInfo= UserInfoResponse.builder()
@@ -55,8 +55,8 @@ public class AuthServiceImpl extends ServiceImpl<UserMapper, SysUser>
                         .phone(user.getPhone())
                         .status(user.getStatus())
                         .build())
-                .token(token)//下发 Token
-                .build();
+                    .token(token)
+                    .build();
         return userInfo;
     }
 

@@ -1,5 +1,5 @@
 server:
-  port: 8081
+  port: 8001
   servlet:
     context-path: /api
 
@@ -46,8 +46,6 @@ logging:
 
 
 
-      # JWT 密钥      ${...}：这是 Spring Boot 读取环境变量或配置文件中占位符的标准写法
-    # 变量名称      分隔符       默认值(如果没获取到变量则)
 jwt:
   secret-key: yiJU6i33Da4J1r6MuiD2I9TMk3A1nrxnieRFmoja5kU= # 环境变量优先
   expiration: 7200 # 单位：秒

@@ -33,6 +33,9 @@
         <nacos-discovery.version>2022.0.0.0</nacos-discovery.version>
         <spring-cloud-starter-bootstrap.version>4.3.0</spring-cloud-starter-bootstrap.version>
         <jjwt-api.version>0.11.5</jjwt-api.version>
+        <fastjson.version>2.0.60</fastjson.version>
+        <loadbalancer.version>4.3.0</loadbalancer.version>
+        <sentinel.version>1.8.8</sentinel.version>
         <!-- Maven插件版本（适配3.9.12） -->
         <maven-compiler-plugin.version>3.12.1</maven-compiler-plugin.version>
         <maven-surefire-plugin.version>3.2.5</maven-surefire-plugin.version>
@@ -124,6 +127,55 @@
                 <artifactId>jjwt-jackson</artifactId>
                 <version>${jjwt-api.version}</version>
                 <scope>runtime</scope>
+            </dependency>
+            <!--fastjson-->
+            <!-- Source: https://mvnrepository.com/artifact/com.alibaba.fastjson2/fastjson2 -->
+            <dependency>
+                <groupId>com.alibaba.fastjson2</groupId>
+                <artifactId>fastjson2</artifactId>
+                <version>${fastjson.version}</version>
+                <scope>compile</scope>
+            </dependency>
+            <!--从服务注册中心（Nacos）获取服务实例列表-->
+            <!-- Source: https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-loadbalancer -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-loadbalancer</artifactId>
+                <version>${loadbalancer.version}</version>
+                <scope>compile</scope>
+            </dependency>
+            <!-- Sentinel流量控制和熔断降级 -->
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
+                <version>${spring-cloud-alibaba.version}</version>
+                <scope>compile</scope>
+            </dependency>
+            <!-- Sentinel 核心（1.8.8） -->
+            <dependency>
+                <groupId>com.alibaba.csp</groupId>
+                <artifactId>sentinel-core</artifactId>
+                <version>${sentinel.version}</version>
+            </dependency>
+
+            <!-- Sentinel Web Servlet（用于指标统计） -->
+            <dependency>
+                <groupId>com.alibaba.csp</groupId>
+                <artifactId>sentinel-web-servlet</artifactId>
+                <version>${sentinel.version}</version>
+            </dependency>
+
+            <!-- Sentinel Transport（连接 Dashboard） -->
+            <dependency>
+                <groupId>com.alibaba.csp</groupId>
+                <artifactId>sentinel-transport-simple-http</artifactId>
+                <version>${sentinel.version}</version>
+            </dependency>
+            <!-- Sentinel Gateway适配器 -->
+            <dependency>
+                <groupId>com.alibaba.csp</groupId>
+                <artifactId>sentinel-spring-cloud-gateway-adapter</artifactId>
+                <version>${sentinel.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

@@ -1,3 +1,4 @@
+
 package com.mediacare.user.interceptor;
 
 
@@ -10,6 +11,24 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import java.io.IOException;
+
+
+
+/*
+* 因为gateway-service实现了登录鉴权
+* 所有此处的拦截器需要修改，不用再从请求头中获取token并进行二次验证
+* 更不用解析验证token，因为网关进行了登录鉴权，除非绕过网关
+*
+* 所以写一个新的拦截器类来实现
+* */
+
+import com.mediacare.user.util.JwtUtil;
+import com.mediacare.user.util.UserContext;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.HandlerInterceptor;
 
 @Slf4j
 @Component
@@ -71,3 +90,4 @@ public class LoginInterceptor implements HandlerInterceptor {
     }
 
 }
+
